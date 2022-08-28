@@ -36,7 +36,7 @@ class CliParser
                 $args[$val] = true;
             } else if (is_array($val)) {
                 foreach ($val as $k => $v) {
-                    if (is_string($k) && is_string($v)) $args[$k] = $v;
+                    if (is_string($k)) $args[$k] = $v;
                 }
             }
         }
@@ -87,6 +87,14 @@ class CliParser
             $_key = $this->args[$this->idx];
             if ( is_string($_key) ) {
                 $this->args[$this->idx] = array($_key => $val);
+            }else if(is_array($_key)){
+                $key = array_key_last($_key);
+                if(is_array($_key[$key])){
+                    $_key[$key][] = $val;
+                }else{
+                    $_key[$key] = array($_key[$key], $val);
+                }
+                $this->args[$this->idx] = $_key;
             }
         }
     }
